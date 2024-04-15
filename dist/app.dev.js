@@ -1,22 +1,38 @@
 "use strict";
 
-// app.js
-var AuthService = require('./module/AuthModule');
+var express = require('express');
 
-var UserService = require('./module/UserModule');
+var app = express(); // Імпортуємо модулі
 
-var PaymentController = require('./modules/payment/PaymentModule'); // Створення екземплярів сервісів
+var AuthModule = require('./Module/AuthModule');
+
+var UserModule = require('./Module/UserModule');
+
+var PaymentModule = require('./Payment/PaymentModule');
+
+var PaymentController = require('./Payment/PaymentController');
+
+var PaymentService = require('./Payment/PaymentService'); // Підключаємо мікросервіси
 
 
-var AuthModule = new AuthService();
-var UserModule = new UserService();
-var paymentController = new PaymentController(); // Приклад використання сервісів
+var authMicroservice = require('./microservices/authentication');
 
-var username = "exampleUser";
-var password = "examplePassword";
-authService.registerUser({
-  username: username,
-  password: password
+var paymentMicroservice = require('./microservices/Payment');
+
+var userMicroservice = require('./microservices/Users'); // Використовуємо модулі
+
+
+app.use('/auth', AuthModule);
+app.use('/users', UserModule);
+app.use('/payment', PaymentModule); // Використовуємо контролер та сервіс для платежів
+
+var paymentController = new PaymentController(new PaymentService(paymentMicroservice));
+app.use('/payment', paymentController.routes); // Підключаємо мікросервіси
+
+authMicroservice.connect();
+paymentMicroservice.connect();
+userMicroservice.connect(); // Запускаємо сервер
+
+app.listen(3000, function () {
+  console.log('Server started on port 3000');
 });
-authService.signInUser(username, password); // Виклик методів контролера платежів для обробки платежів
-// const paymentResult = paymentController.processPayment(paymentData);
