@@ -1,5 +1,5 @@
-const Auth = require('./Auth');
-const PaymentController = require('./PaymentController');
+const Auth = require('./Module/auth');
+const PaymentController = require('./Payment/PaymentController');
 
 // Создание пользователя и авторизация
 const auth = new Auth();
