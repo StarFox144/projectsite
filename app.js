@@ -1,7 +1,7 @@
 // app.js
 
-const AuthService = require('./module/Auth Module');
-const UserService = require('./module/User Module');
+const AuthService = require('./module/AuthModule');
+const UserService = require('./module/UserModule');
 const PaymentController = require('./modules/payment/PaymentModule');
 
 // Створення екземплярів сервісів
