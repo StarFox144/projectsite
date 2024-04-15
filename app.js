@@ -1,16 +1,28 @@
-const Auth = require('./Module/auth');
-const PaymentController = require('./Payment/PaymentController');
+const Auth = require('./modules/Auth');
+const PaymentController = require('./payment/PaymentController');
 
-// Создание пользователя и авторизация
+// Регистрация пользователя
 const auth = new Auth();
 const user = auth.registerUser('John Doe', 'john@example.com', 'password');
-const loggedInUser = auth.login('john@example.com', 'password');
+console.log('Registered user:', user);
 
-// Создание платежа и управление статусом
+// Авторизация пользователя
+const loggedInUser = auth.login('john@example.com', 'password');
+if (loggedInUser) {
+  console.log('Logged in user:', loggedInUser);
+} else {
+  console.log('Invalid email or password');
+}
+
+// Создание платежа
 const paymentController = new PaymentController();
 const payment = paymentController.createPayment(100, 'USD');
-console.log(payment); // { id: 1, amount: 100, currency: 'USD', status: 'pending' }
+console.log('Created payment:', payment);
 
-paymentController.updatePaymentStatus(payment.id, 'paid');
-const updatedPayment = paymentController.getPayment(payment.id);
-console.log(updatedPayment); // { id: 1, amount: 100, currency: 'USD', status: 'paid' }
+// Получение платежа
+const retrievedPayment = paymentController.getPayment(payment.id);
+console.log('Retrieved payment:', retrievedPayment);
+
+// Обновление статуса платежа
+const updatedPayment = paymentController.updatePaymentStatus(payment.id, 'paid');
+console.log('Updated payment:', updatedPayment);

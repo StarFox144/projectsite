@@ -1,4 +1,4 @@
-const User = require('/module/User');
+const User = require('./modules/User');
 
 class Auth {
   constructor() {
