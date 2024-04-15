@@ -1,11 +1,11 @@
-const User = require('./modules/User');
+const User = require('./modules/user');
 
 class Auth {
   constructor() {
     this.users = [];
   }
 
-  registerUser(name, email, password) {
+  register(name, email, password) {
     const user = new User(this.users.length + 1, name, email, password);
     this.users.push(user);
     return user;

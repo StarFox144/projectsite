@@ -1,27 +1,18 @@
-const Payment = require('./Paymant/Payment');
+const Payment = require('./payment');
 
 class PaymentService {
   constructor() {
     this.payments = [];
   }
 
-  createPayment(amount, currency) {
-    const payment = new Payment(this.payments.length + 1, amount, currency, 'pending');
+  createPayment(amount, currency, description) {
+    const payment = new Payment(this.payments.length + 1, amount, currency, description);
     this.payments.push(payment);
     return payment;
   }
 
   getPayment(id) {
     return this.payments.find(p => p.id === id);
-  }
-
-  updatePaymentStatus(id, status) {
-    const payment = this.getPayment(id);
-    if (payment) {
-      payment.status = status;
-      return payment;
-    }
-    return null;
   }
 }
 

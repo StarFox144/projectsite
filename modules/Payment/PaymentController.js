@@ -1,20 +1,18 @@
-const PaymentService = require('./Payment/PaymentService');
+const Payment = require('./payment');
+const PaymentService = require('./payment/paymentService');
 
 class PaymentController {
   constructor() {
     this.paymentService = new PaymentService();
   }
 
-  createPayment(amount, currency) {
-    return this.paymentService.createPayment(amount, currency);
+  createPayment(amount, currency, description) {
+    const payment = this.paymentService.createPayment(amount, currency, description);
+    return payment;
   }
 
   getPayment(id) {
     return this.paymentService.getPayment(id);
-  }
-
-  updatePaymentStatus(id, status) {
-    return this.paymentService.updatePaymentStatus(id, status);
   }
 }
 
