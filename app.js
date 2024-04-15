@@ -1,33 +1,65 @@
-const express = require('express');
-const app = express();
+// AuthModule.js
+class AuthModule {
+  signup(userData) {
+    // Implement user signup logic
+    console.log(`User '${userData.username}' signed up.`);
+  }
 
-// Імпортуємо модулі
+  signin(userData) {
+    // Implement user sign-in logic
+    console.log(`User '${userData.username}' signed in.`);
+  }
+}
+
+// UserModule.js
+class UserModule {
+  getSubscriptions(user) {
+    // Implement logic to fetch user subscriptions
+    console.log(`Fetching subscriptions for user '${user.username}'.`);
+  }
+}
+
+// PaymentService.js
+class PaymentService {
+  buySubscription(user, duration) {
+    // Implement logic to handle subscription purchase
+    console.log(`Purchased ${duration}-month subscription for user '${user.username}'.`);
+  }
+}
+
+// PaymentController.js
+class PaymentController {
+  constructor(paymentService) {
+    this.paymentService = paymentService;
+  }
+
+  buySubscription(user, duration) {
+    this.paymentService.buySubscription(user, duration);
+  }
+}
+
+// main.js
 const AuthModule = require('./Module/AuthModule');
 const UserModule = require('./Module/UserModule');
-const PaymentModule = require('./Payment/PaymentModule');
-const PaymentController = require('./Payment/PaymentController');
 const PaymentService = require('./Payment/PaymentService');
+const PaymentController = require('./Payment/PaymentController');
 
-// Підключаємо мікросервіси
-const authMicroservice = require('./microservices/authentication');
-const paymentMicroservice = require('./microservices/Payment');
-const userMicroservice = require('./microservices/Users');
+const main = () => {
+  const authModule = new AuthModule();
+  const userModule = new UserModule();
+  const paymentService = new PaymentService();
+  const paymentController = new PaymentController(paymentService);
 
-// Використовуємо модулі
-app.use('/auth', AuthModule);
-app.use('/users', UserModule);
-app.use('/payment', PaymentModule);
+  const user = { username: 'JohnDoe' };
 
-// Використовуємо контролер та сервіс для платежів
-const paymentController = new PaymentController(new PaymentService(paymentMicroservice));
-app.use('/payment', paymentController.routes);
+  authModule.signup(user);
+  authModule.signin(user);
 
-// Підключаємо мікросервіси
-authMicroservice.connect();
-paymentMicroservice.connect();
-userMicroservice.connect();
+  paymentController.buySubscription(user, 1);
+  paymentController.buySubscription(user, 6);
+  paymentController.buySubscription(user, 2);
 
-// Запускаємо сервер
-app.listen(3000, () => {
-  console.log('Server started on port 3000');
-});
+  userModule.getSubscriptions(user);
+};
+
+main();
