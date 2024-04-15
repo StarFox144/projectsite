@@ -1,65 +1,16 @@
-// AuthModule.js
-class AuthModule {
-  signup(userData) {
-    // Implement user signup logic
-    console.log(`User '${userData.username}' signed up.`);
-  }
+const Auth = require('./Auth');
+const PaymentController = require('./PaymentController');
 
-  signin(userData) {
-    // Implement user sign-in logic
-    console.log(`User '${userData.username}' signed in.`);
-  }
-}
+// Создание пользователя и авторизация
+const auth = new Auth();
+const user = auth.registerUser('John Doe', 'john@example.com', 'password');
+const loggedInUser = auth.login('john@example.com', 'password');
 
-// UserModule.js
-class UserModule {
-  getSubscriptions(user) {
-    // Implement logic to fetch user subscriptions
-    console.log(`Fetching subscriptions for user '${user.username}'.`);
-  }
-}
+// Создание платежа и управление статусом
+const paymentController = new PaymentController();
+const payment = paymentController.createPayment(100, 'USD');
+console.log(payment); // { id: 1, amount: 100, currency: 'USD', status: 'pending' }
 
-// PaymentService.js
-class PaymentService {
-  buySubscription(user, duration) {
-    // Implement logic to handle subscription purchase
-    console.log(`Purchased ${duration}-month subscription for user '${user.username}'.`);
-  }
-}
-
-// PaymentController.js
-class PaymentController {
-  constructor(paymentService) {
-    this.paymentService = paymentService;
-  }
-
-  buySubscription(user, duration) {
-    this.paymentService.buySubscription(user, duration);
-  }
-}
-
-// main.js
-const AuthModule = require('./Module/AuthModule');
-const UserModule = require('./Module/UserModule');
-const PaymentService = require('./Payment/PaymentService');
-const PaymentController = require('./Payment/PaymentController');
-
-const main = () => {
-  const authModule = new AuthModule();
-  const userModule = new UserModule();
-  const paymentService = new PaymentService();
-  const paymentController = new PaymentController(paymentService);
-
-  const user = { username: 'JohnDoe' };
-
-  authModule.signup(user);
-  authModule.signin(user);
-
-  paymentController.buySubscription(user, 1);
-  paymentController.buySubscription(user, 6);
-  paymentController.buySubscription(user, 2);
-
-  userModule.getSubscriptions(user);
-};
-
-main();
+paymentController.updatePaymentStatus(payment.id, 'paid');
+const updatedPayment = paymentController.getPayment(payment.id);
+console.log(updatedPayment); // { id: 1, amount: 100, currency: 'USD', status: 'paid' }

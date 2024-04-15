@@ -1,4 +1,4 @@
-const Payment = require('./payment');
+const Payment = require('./Payment/Payment');
 
 class PaymentService {
   constructor() {
@@ -6,21 +6,22 @@ class PaymentService {
   }
 
   createPayment(amount, currency) {
-    const payment = new Payment(amount, currency);
+    const payment = new Payment(this.payments.length + 1, amount, currency, 'pending');
     this.payments.push(payment);
     return payment;
   }
 
-  processPayment(paymentId) {
-    const payment = this.payments.find(p => p.id === paymentId);
-    if (!payment) {
-      throw new Error('Payment not found');
-    }
-    payment.processPayment();
+  getPayment(id) {
+    return this.payments.find(p => p.id === id);
   }
 
-  getAllPayments() {
-    return this.payments;
+  updatePaymentStatus(id, status) {
+    const payment = this.getPayment(id);
+    if (payment) {
+      payment.status = status;
+      return payment;
+    }
+    return null;
   }
 }
 
