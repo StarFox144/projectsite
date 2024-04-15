@@ -2,7 +2,7 @@
 
 const AuthService = require('./module/Auth Module');
 const UserService = require('./module/User Module');
-const PaymentController = require('./modules/payment/Payment Module');
+const PaymentController = require('./modules/payment/PaymentModule');
 
 // Створення екземплярів сервісів
 const authService = new AuthService();
