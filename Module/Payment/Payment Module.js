@@ -1,4 +1,3 @@
-
 class Payment {
     constructor(amount, currency) {
       this.amount = amount;
